@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started — SmartMed</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">SmartMed</div>
+            <ul class="nav-links">
+                <li><a href="Index.html">Home</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="schedule.html">Schedules</a></li>
+                <li><a href="medicines.html">My Medicines</a></li>
+                <li><a href="progress.html">Progress</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Get Started with SmartMed</h1>
+            <p>Follow these simple steps to set up your medication reminders and start tracking your health.</p>
+            <div class="button-row">
+                <a href="add_medicine.html" class="primary-btn">1. Add Medicine</a>
+                <a href="set_schedule.html" class="secondary-btn">2. Set Schedule</a>
+                <a href="dashboard.html" class="primary-btn">3. View Dashboard</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="how" class="how-it-works">
+        <h2>Quick Walkthrough</h2>
+        <div class="steps">
+            <div class="step">
+                <span>1</span>
+                <h3>Add Medicines</h3>
+                <p>Enter medicine name, dosage and notes so SmartMed knows what to remind you about.</p>
+            </div>
+            <div class="step">
+                <span>2</span>
+                <h3>Set Your Schedule</h3>
+                <p>Choose times and repetition so reminders fit your routine.</p>
+            </div>
+            <div class="step">
+                <span>3</span>
+                <h3>Track Progress</h3>
+                <p>Open your dashboard to view adherence and history.</p>
+            </div>
+        </div>
+    </section>
+
+    <div id="app-notification" class="app-notification hidden" role="alert" aria-live="assertive">
+        <div class="app-notification-card">
+            <strong>SmartMed Alert</strong>
+            <p id="app-notification-text"></p>
+            <button class="secondary-btn" onclick="hideInAppNotification()">Dismiss</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 SmartMed</p>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        startReminderChecker();
+    </script>
+</body>
+</html>

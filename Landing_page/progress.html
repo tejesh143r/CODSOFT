@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress — SmartMed</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">SmartMed</div>
+            <ul class="nav-links">
+                <li><a href="Index.html">Home</a></li>
+                <li><a href="get_started.html">Get Started</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="schedule.html">Schedules</a></li>
+                <li><a href="medicines.html">My Medicines</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="page-main">
+        <div class="page-header">
+            <h2>Health Progress</h2>
+            <p class="small-note">Review how many medicines and reminders are currently active, plus the latest alert activity.</p>
+        </div>
+        <div class="card-grid">
+            <div class="card">
+                <h3>Total Medicines</h3>
+                <p id="total-medicines">0</p>
+            </div>
+            <div class="card">
+                <h3>Active Reminders</h3>
+                <p id="total-reminders">0</p>
+            </div>
+            <div class="card">
+                <h3>Recent Alerts</h3>
+                <p id="active-alerts">0</p>
+            </div>
+        </div>
+        <div class="section-footer">
+            <div class="card">
+                <h3>Progress Notes</h3>
+                <p id="progress-note">SmartMed helps you stay on track with consistent medication reminders and health logs.</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="app-notification" class="app-notification hidden" role="alert" aria-live="assertive">
+        <div class="app-notification-card">
+            <strong>SmartMed Alert</strong>
+            <p id="app-notification-text"></p>
+            <button class="secondary-btn" onclick="hideInAppNotification()">Dismiss</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 SmartMed</p>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        const medicines = getMedicines();
+        const schedules = getSchedules();
+        const alerts = getAlerts();
+
+        document.getElementById('total-medicines').textContent = medicines.length;
+        document.getElementById('total-reminders').textContent = schedules.length;
+        document.getElementById('active-alerts').textContent = alerts.length;
+
+        if (!schedules.length) {
+            document.getElementById('progress-note').textContent = 'Add a medicine and schedule reminders to begin tracking your progress.';
+        }
+
+        startReminderChecker();
+    </script>
+</body>
+</html>

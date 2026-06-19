@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Medicines — SmartMed</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">SmartMed</div>
+            <ul class="nav-links">
+                <li><a href="Index.html">Home</a></li>
+                <li><a href="get_started.html">Get Started</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="schedule.html">Schedules</a></li>
+                <li><a href="progress.html">Progress</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="page-main">
+        <div class="page-header">
+            <h2>My Medicines</h2>
+            <p class="small-note">Review or remove medicine entries and keep your reminder list current.</p>
+        </div>
+        <div class="button-row">
+            <a href="add_medicine.html" class="primary-btn">Add New Medicine</a>
+        </div>
+        <div id="medicine-list"></div>
+    </main>
+
+    <div id="app-notification" class="app-notification hidden" role="alert" aria-live="assertive">
+        <div class="app-notification-card">
+            <strong>SmartMed Alert</strong>
+            <p id="app-notification-text"></p>
+            <button class="secondary-btn" onclick="hideInAppNotification()">Dismiss</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 SmartMed</p>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        function renderMedicines() {
+            const listEl = document.getElementById('medicine-list');
+            const medicines = getMedicines();
+            listEl.innerHTML = '';
+
+            if (!medicines.length) {
+                const empty = document.createElement('p');
+                empty.textContent = 'No medicines added yet. Start by adding your first medicine.';
+                empty.className = 'small-note';
+                listEl.appendChild(empty);
+                return;
+            }
+
+            medicines.forEach(med => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.minWidth = '260px';
+                card.innerHTML = `
+                    <h3>${med.name}</h3>
+                    <p><strong>Dosage:</strong> ${med.dosage || 'Not set'}</p>
+                    <p><strong>Frequency:</strong> ${med.frequency || 'Not set'}</p>
+                    <p><strong>Start:</strong> ${med.start || 'Not set'}</p>
+                    <p>${med.notes || ''}</p>
+                    <button class="secondary-btn" onclick="deleteMedicine(${med.id})">Remove</button>
+                `;
+                listEl.appendChild(card);
+            });
+        }
+
+        renderMedicines();
+        startReminderChecker();
+    </script>
+</body>
+</html>

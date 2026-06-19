@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedules — SmartMed</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">SmartMed</div>
+            <ul class="nav-links">
+                <li><a href="Index.html">Home</a></li>
+                <li><a href="get_started.html">Get Started</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="medicines.html">My Medicines</a></li>
+                <li><a href="progress.html">Progress</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="page-main">
+        <div class="page-header">
+            <h2>Schedule Manager</h2>
+            <p class="small-note">Review reminder timings, notification preferences, or delete outdated schedules.</p>
+        </div>
+        <div id="schedule-list"></div>
+    </main>
+
+    <div id="app-notification" class="app-notification hidden" role="alert" aria-live="assertive">
+        <div class="app-notification-card">
+            <strong>SmartMed Alert</strong>
+            <p id="app-notification-text"></p>
+            <button class="secondary-btn" onclick="hideInAppNotification()">Dismiss</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 SmartMed</p>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        function renderSchedules() {
+            const listEl = document.getElementById('schedule-list');
+            const schedules = getSchedules();
+            listEl.innerHTML = '';
+
+            if (!schedules.length) {
+                const empty = document.createElement('p');
+                empty.textContent = 'No schedules yet. Add a reminder from the schedule page.';
+                empty.className = 'small-note';
+                listEl.appendChild(empty);
+                return;
+            }
+
+            schedules.forEach(schedule => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.minWidth = '320px';
+                card.innerHTML = `
+                    <h3>${schedule.medicine}</h3>
+                    <p><strong>Time:</strong> ${schedule.time}</p>
+                    <p><strong>Repeat:</strong> ${schedule.repeat}</p>
+                    <p><strong>Email:</strong> ${schedule.email || 'Not configured'}</p>
+                    <p><strong>SMS:</strong> ${schedule.phone || 'Not configured'}</p>
+                    <p><strong>Methods:</strong> ${schedule.methods.join(', ')}</p>
+                    <button class="secondary-btn" onclick="deleteSchedule(${schedule.id})">Delete Schedule</button>
+                `;
+                listEl.appendChild(card);
+            });
+        }
+
+        renderSchedules();
+        startReminderChecker();
+    </script>
+</body>
+</html>

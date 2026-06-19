@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — SmartMed</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">SmartMed</div>
+            <ul class="nav-links">
+                <li><a href="Index.html">Home</a></li>
+                <li><a href="get_started.html">Get Started</a></li>
+                <li><a href="schedule.html">Schedules</a></li>
+                <li><a href="medicines.html">My Medicines</a></li>
+                <li><a href="progress.html">Progress</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="page-main">
+        <div class="page-header">
+            <h2>Your Dashboard</h2>
+            <p class="small-note">Track important reminder statistics, upcoming doses, and your recent alert history.</p>
+            <p class="small-note">Keep this browser tab open for reminder alerts to fire at the scheduled time.</p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>Adherence Summary</h3>
+                <p>Medicines added: <strong id="dashboard-medicine-count">0</strong></p>
+                <p>Active reminders: <strong id="dashboard-reminder-count">0</strong></p>
+            </div>
+
+            <div class="card">
+                <h3>Next Reminder</h3>
+                <p id="next-reminder" class="small-note">Loading next reminder...</p>
+            </div>
+
+            <div class="card">
+                <h3>Upcoming Reminders</h3>
+                <ul id="upcoming-list"></ul>
+            </div>
+
+            <div class="card">
+                <h3>Recent Alerts</h3>
+                <ul id="alert-history" class="card-list"></ul>
+            </div>
+
+            <div class="card">
+                <h3>History</h3>
+                <p>View past medication logs and export data for your provider.</p>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <a href="add_medicine.html" class="primary-btn">Add Another Medicine</a>
+            <a href="set_schedule.html" class="secondary-btn">Edit Schedule</a>
+        </div>
+
+    </main>
+
+    <div id="app-notification" class="app-notification hidden" role="alert" aria-live="assertive">
+        <div class="app-notification-card">
+            <strong>SmartMed Alert</strong>
+            <p id="app-notification-text"></p>
+            <button class="secondary-btn" onclick="hideInAppNotification()">Dismiss</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 SmartMed</p>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        renderUpcomingReminders();
+        renderAlertHistory();
+        renderNextReminder();
+
+        const medicines = getMedicines();
+        const schedules = getSchedules();
+        document.getElementById('dashboard-medicine-count').textContent = medicines.length;
+        document.getElementById('dashboard-reminder-count').textContent = schedules.length;
+
+        startReminderChecker();
+    </script>
+</body>
+</html>

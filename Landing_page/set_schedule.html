@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Schedule — SmartMed</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">SmartMed</div>
+            <ul class="nav-links">
+                <li><a href="Index.html">Home</a></li>
+                <li><a href="get_started.html">Get Started</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="schedule.html">Schedules</a></li>
+                <li><a href="medicines.html">My Medicines</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="page-main">
+        <div class="page-header">
+            <h2>Set Reminder Schedule</h2>
+            <p class="small-note">Pick the time and preferred notification methods for your medicine reminders.</p>
+        </div>
+        <form id="schedule-form" class="form-grid form-card">
+            <div class="form-group">
+                <label>Medicine</label>
+                <select class="input-field" name="medicine" id="medicine-select" required>
+                    <option value="">Select a medicine</option>
+                </select>
+                <p class="small-note">Add a medicine first if you don’t see it listed.</p>
+            </div>
+
+            <div class="form-group">
+                <label>Time</label>
+                <input class="input-field" type="time" name="time" required>
+            </div>
+
+            <div class="form-group">
+                <label>Repeat</label>
+                <select class="input-field" name="repeat">
+                    <option>Daily</option>
+                    <option>Weekly</option>
+                    <option>Custom</option>
+                </select>
+            </div>
+
+            <label class="form-group">Reminder Method</label>
+            <div class="form-grid">
+                <label class="checkbox-row"><input type="checkbox" name="method_inapp" checked disabled> In-app</label>
+                <label class="checkbox-row"><input type="checkbox" name="method_email"> Email</label>
+                <input class="input-field" type="email" name="email" placeholder="Enter email address">
+                <label class="checkbox-row"><input type="checkbox" name="method_sms"> SMS</label>
+                <input class="input-field" type="tel" name="phone" placeholder="Enter phone number">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="primary-btn">Save Schedule</button>
+            </div>
+        </form>
+
+        <p class="small-note">Email and SMS are saved as reminder preferences in this demo. SMS reminders require the SmartMed backend service to be running.</p>
+        <p class="small-note">Backend SMS delivery can reach your phone even when the browser is closed.</p>
+    </main>
+
+    <div id="app-notification" class="app-notification hidden" role="alert" aria-live="assertive">
+        <div class="app-notification-card">
+            <strong>SmartMed Alert</strong>
+            <p id="app-notification-text"></p>
+            <button class="secondary-btn" onclick="hideInAppNotification()">Dismiss</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 SmartMed</p>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        initScheduleForm();
+        startReminderChecker();
+
+        document.getElementById('schedule-form').addEventListener('submit', async function(e){
+            e.preventDefault();
+            const form = e.target;
+            const schedule = {
+                medicine: form.medicine.value,
+                time: form.time.value,
+                repeat: form.repeat.value,
+                email: form.email.value || '',
+                phone: form.phone.value || '',
+                methods: [
+                    'In-app',
+                    ...(form.method_email.checked ? ['Email'] : []),
+                    ...(form.method_sms.checked ? ['SMS'] : [])
+                ]
+            };
+            saveSchedule(schedule);
+            showInAppNotification('Schedule saved locally. Syncing with backend...');
+            const serverResult = await sendScheduleToBackend(schedule);
+            if (serverResult && serverResult.success) {
+                showInAppNotification('Schedule synced with backend. SMS reminders will be delivered when due.');
+            } else {
+                showInAppNotification('Schedule saved locally. Backend sync failed or server is not running.');
+            }
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1400);
+        });
+    </script>
+</body>
+</html>
